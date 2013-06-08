@@ -10,7 +10,7 @@
 // @include         http://daringfireball.net/*
 // @require         http://code.jquery.com/jquery-latest.min.js
 // @run-at          document-end
-
+// ==/UserScript==
 
 //Matchers
 
@@ -20,7 +20,7 @@ NodeRegexMatcher = (function() {
   }
 
   NodeRegexMatcher.prototype.getMatches = function(node) {
-    if(!isTextNode(node))
+    if(!isTextNode.call(node))
       return [];
 
     $(node).empty();
@@ -189,15 +189,11 @@ TwitterNodeLinkifier = (function() {
   return TwitterNodeLinkifier;
 })();
 
-function isTextNode(node) {
-  return node.nodeType === 3;
-}
-
-function anotherisTextNode() {
+function isTextNode() {
   return this.nodeType === 3;
 }
 
-function descendantNodes( node ) {
+function descendantNodes(node) {
   return $(node).add("*", node).contents();
 }
 
@@ -220,7 +216,7 @@ var linkifiers = [
 ];
 
 linkifiers.forEach(function(linkifier) {
-  $.each(descendantNodes($("body")).filter(anotherisTextNode), function(i, node) {
+  $.each(descendantNodes($("body")).filter(isTextNode), function(i, node) {
     linkifier.linkifyNode(node);
   });
 });
